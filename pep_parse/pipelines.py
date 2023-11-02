@@ -9,18 +9,16 @@ from pep_parse.settings import (BASE_DIR, DATETIME_FORMAT, FILE_FORMAT,
 
 class PepParsePipeline:
 
-    def __init__(self):
-        self.results_dir = BASE_DIR / RESULTS
-        self.results_dir.mkdir(exist_ok=True)
-
     def open_spider(self, spider):
         self.statuses = defaultdict(int)
 
     def close_spider(self, spider):
+        results_dir = BASE_DIR / RESULTS
+        results_dir.mkdir(exist_ok=True)
         now = dt.datetime.now()
         now_formatted = now.strftime(DATETIME_FORMAT)
         file_name = f'{SUMMARY_NAME}_{now_formatted}.{FILE_FORMAT}'
-        file_path = self.results_dir / file_name
+        file_path = results_dir / file_name
         with open(file_path, mode='w', encoding='utf-8') as csvfile:
             csv.writer(
                 csvfile,
